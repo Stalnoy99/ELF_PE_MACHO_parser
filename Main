@@ -1,0 +1,503 @@
+import sys
+import struct
+import datetime
+
+if len(sys.argv) != 2:
+   exit(0)
+try:
+   file = open(sys.argv[1], 'rb')
+   fileData = file.read()
+   magic = struct.unpack('4B', fileData[0:4])
+   if magic[0] == 0x7f and magic[1] == 0x45 and magic[2] == 0x4c and magic[3] == 0x46:
+       print("Type of file: ELF")
+       header = struct.unpack('16B2HI3QI6H', fileData[0:64])
+       e_ident = struct.unpack('16B', fileData[0:16])
+       if e_ident[4] == 0x01:
+           print("Class of file: 32-bit architecture")
+       elif e_ident[4] == 0x02:
+           print("Class of file: 64-bit architecture")
+       if e_ident[5] == 0x01:
+           print("Type of data: little-endian (LSB)")
+       elif e_ident[5] == 0x02:
+           print("Type of data: big-endian (MSB)")
+       e_type = struct.unpack('B', fileData[16:17])
+       if e_type[0] == 0x00:
+           print("File type: UNDEFINED")
+       if e_type[0] == 0x01:
+           print("File type: REL (Relocatable file)")
+       if e_type[0] == 0x02:
+           print("File type: EXEC (Executable file)")
+       if e_type[0] == 0x03:
+           print("File type: DYN (Shared object file)")
+       if e_type[0] == 0x04:
+           print("File type: CORE (Core file)")
+       if e_type[0] == 0xFE00:
+           print("File type: ET_LOOS")
+       if e_type[0] == 0xFEFF:
+           print("File type: ET_HIOS")
+       if e_type[0] == 0xFF00:
+           print("File type: ET_LOPROC")
+       if e_type[0] == 0xFFFF:
+           print("File type: ET_HIPROC")
+       e_machine = header[17]
+       if e_machine == 0x00:
+           print("File architecture: ", e_machine, "(No specific instruction set)")
+       if e_machine == 0x01:
+           print("File architecture: ", e_machine, "(AT&T WE 32100)")
+       if e_machine == 0x02:
+           print("File architecture: ", e_machine, "(SPARC)")
+       if e_machine == 0x03:
+           print("File architecture: ", e_machine, "(x86)")
+       if e_machine == 0x04:
+           print("File architecture: ", e_machine, "(Motorola 68000 (M68k))")
+       if e_machine == 0x05:
+           print("File architecture: ", e_machine, "(Motorola 88000 (M88k))")
+       if e_machine == 0x06:
+           print("File architecture: ", e_machine, "(Intel MCU)")
+       if e_machine == 0x07:
+           print("File architecture: ", e_machine, "(Intel 80860)")
+       if e_machine == 0x08:
+           print("File architecture: ", e_machine, "(MIPS)")
+       if e_machine == 0x09:
+           print("File architecture: ", e_machine, "(IBM System/370)")
+       if e_machine == 0x0A:
+           print("File architecture: ", e_machine, "(MIPS RS3000 Little-endian)")
+       if e_machine == 0x0E:
+           print("File architecture: ", e_machine, "(Hewlett-Packard PA-RISC)")
+       if e_machine == 0x0F:
+           print("File architecture: ", e_machine, "(Reserved for future use)")
+       if e_machine == 0x13:
+           print("File architecture: ", e_machine, "(Intel 80960)")
+       if e_machine == 0x14:
+           print("File architecture: ", e_machine, "(PowerPC)")
+       if e_machine == 0x15:
+           print("File architecture: ", e_machine, "(PowerPC (64-bit))")
+       if e_machine == 0x16:
+           print("File architecture: ", e_machine, "(S390, including S390x)")
+       if e_machine == 0x17:
+           print("File architecture: ", e_machine, "(IBM SPU/SPC)")
+       if e_machine == 0x24:
+           print("File architecture: ", e_machine, "(NEC V800)")
+       if e_machine == 0x25:
+           print("File architecture: ", e_machine, "(Fujitsu FR20)")
+       if e_machine == 0x26:
+           print("File architecture: ", e_machine, "(TRW RH-32)")
+       if e_machine == 0x27:
+           print("File architecture: ", e_machine, "(Motorola RCE)")
+       if e_machine == 0x28:
+           print("File architecture: ", e_machine, "(ARM (up to ARMv7/Aarch32))")
+       if e_machine == 0x29:
+           print("File architecture: ", e_machine, "(Digital Alpha)")
+       if e_machine == 0x2A:
+           print("File architecture: ", e_machine, "(SuperH)")
+       if e_machine == 0x2B:
+           print("File architecture: ", e_machine, "(SPARC Version 9)")
+       if e_machine == 0x2C:
+           print("File architecture: ", e_machine, "(Siemens TriCore embedded processor)")
+       if e_machine == 0x2D:
+           print("File architecture: ", e_machine, "(Argonaut RISC Core)")
+       if e_machine == 0x2E:
+           print("File architecture: ", e_machine, "(Hitachi H8/300)")
+       if e_machine == 0x2F:
+           print("File architecture: ", e_machine, "(Hitachi H8/300H)")
+       if e_machine == 0x30:
+           print("File architecture: ", e_machine, "(Hitachi H8S)")
+       if e_machine == 0x31:
+           print("File architecture: ", e_machine, "(Hitachi H8/500)")
+       if e_machine == 0x32:
+           print("File architecture: ", e_machine, "( IA-64)")
+       if e_machine == 0x33:
+           print("File architecture: ", e_machine, "(Stanford MIPS-X)")
+       if e_machine == 0x34:
+           print("File architecture: ", e_machine, "(Motorola ColdFire)")
+       if e_machine == 0x35:
+           print("File architecture: ", e_machine, "(Motorola M68HC12)")
+       if e_machine == 0x36:
+           print("File architecture: ", e_machine, "(Fujitsu MMA Multimedia Accelerator)")
+       if e_machine == 0x37:
+           print("File architecture: ", e_machine, "(Siemens PCP)")
+       if e_machine == 0x38:
+           print("File architecture: ", e_machine, "(Sony nCPU embedded RISC processor)")
+       if e_machine == 0x39:
+           print("File architecture: ", e_machine, "(Denso NDR1 microprocessor)")
+       if e_machine == 0x3A:
+           print("File architecture: ", e_machine, "(Motorola Star*Core processor)")
+       if e_machine == 0x3B:
+           print("File architecture: ", e_machine, "(Toyota ME16 processor)")
+       if e_machine == 0x3C:
+           print("File architecture: ", e_machine, "(STMicroelectronics ST100 processor)")
+       if e_machine == 0x3D:
+           print("File architecture: ", e_machine, "(Advanced Logic Corp. TinyJ embedded processor family)")
+       if e_machine == 0x3E:
+           print("File architecture: ", e_machine, "(AMD x86-64)")
+       if e_machine == 0x8C:
+           print("File architecture: ", e_machine, "(TMS320C6000 Family)")
+       if e_machine == 0xAF:
+           print("File architecture: ", e_machine, "(MCST Elbrus e2k)")
+       if e_machine == 0xB7:
+           print("File architecture: ", e_machine, "(ARM 64-bits (ARMv8/Aarch64))")
+       if e_machine == 0xF3:
+           print("File architecture: ", e_machine, "(RISC-V)")
+       if e_machine == 0xF7:
+           print("File architecture: ", e_machine, "(Berkeley Packet Filter)")
+       if e_machine == 0x101:
+           print("File architecture: ", e_machine, "(WDC 65C816)")
+       e_version = header[18]
+       print("Version: ", e_version)
+       e_entry = header[19]
+       print('Entry point virtual address: ', hex(e_entry))
+       e_phoff = header[20]
+       print('Program header table file offset: ', hex(e_phoff))
+       e_phnum = header[25]
+       print('Program header table entry count: ', e_phnum)
+       e_shoff = header[21]
+       print('Section header table file offset: ', hex(e_shoff))
+       e_shnum = header[27]
+       print('Section header table entry count: ', e_shnum)
+       print('\n----------Functions list----------\n')
+       for i in range(e_shnum - 1):
+           try:
+               unpacked_structure = struct.unpack('64B', fileData[e_shoff:(e_shoff + 64)])
+               elf_section = fileData.hex()[e_shoff * 2:(e_shoff * 2 + 128)]
+               if unpacked_structure[4] == 3:
+                   str_section = ''
+                   if len(elf_section[48:64]) % 2 != 0:
+                       str_section = elf_section[48:64] + '0'
+                   else:
+                       str_section = elf_section[48:64]
+                   byte_array_section = bytearray.fromhex(str_section)
+                   byte_array_section.reverse()
+                   address_of_function = int(byte_array_section.hex(), 16) * 2
+                   if len(elf_section[64:80]) % 2 != 0:
+                       str_section = elf_section[64:80] + '0'
+                   else:
+                       str_section = elf_section[64:80]
+                   byte_array_section = bytearray.fromhex(str_section)
+                   byte_array_section.reverse()
+                   size_of_function = int(byte_array_section.hex(), 16) * 2
+                   list_of_functions = fileData.hex()[address_of_function + 4:address_of_function + size_of_function]
+                   list_of_functions = list_of_functions.split("00")
+                   for function in list_of_functions:
+                       if function == '':
+                           continue
+                       print("Function's hex-code: ", function)
+                       try:
+                           print("Decoded function: ", bytearray.fromhex(function).decode(), '\n')
+                       except ValueError:
+                           print("DecodingFunctionError!\n")
+           except struct.error:
+               print("Unpacking Error! / Functions not detected")
+               exit(3)
+           e_shoff += 64
+   elif magic[0] == 0xcf and magic[1] == 0xfa:
+       header = struct.unpack('<LII4L', fileData[0:28])
+       magic = header[0]
+       x = ''
+       if magic == 0xFEEDFACF:
+           x = 'x64'
+       if magic == 0xFEEDFACE:
+           x = 'x32'
+       print("Type of file: Mach_O (", x, ")")
+       cputype = header[1]
+       if cputype == 1:
+           print("CPU specifier: VAX (", cputype, ")")
+       if cputype == 6:
+           print("CPU specifier: MC680x0 (", cputype, ")")
+       if cputype == 7:
+           print("CPU specifier: x86 (", cputype, ")")
+       if cputype == 16777223:
+           print("CPU specifier: x86_64 (", cputype, ")")
+       if cputype == 10:
+           print("CPU specifier: MC98000 (", cputype, ")")
+       if cputype == 11:
+           print("CPU specifier: HPPA (", cputype, ")")
+       if cputype == 12:
+           print("CPU specifier: ARM (", cputype, ")")
+       if cputype == 13:
+           print("CPU specifier: MC88000 (", cputype, ")")
+       if cputype == 14:
+           print("CPU specifier: SPARC (", cputype, ")")
+       if cputype == 15:
+           print("CPU specifier: I860 (", cputype, ")")
+       if cputype == 18:
+           print("CPU specifier: POWERPC (", cputype, ")")
+       if cputype == 16777234:
+           print("CPU specifier: POWERPC64 (", cputype, ")")
+       filetype = header[3]
+       if filetype == 1:
+           print('File type: MH_OBJECT')
+       if filetype == 2:
+           print('File type: MH_EXECUTE')
+       if filetype == 3:
+           print('File type: MH_FVMLIB')
+       if filetype == 4:
+           print('File type: MH_CORE')
+       if filetype == 5:
+           print('File type: MH_PRELOAD')
+       if filetype == 6:
+           print('File type: MH_DYLIB')
+       if filetype == 7:
+           print('File type: MH_DYLINKER')
+       if filetype == 8:
+           print('File type: MH_BUNDLE')
+       if filetype == 9:
+           print('File type: MH_DYLIB_STUB')
+       if filetype == 10:
+           print('File type: MH_DSYM')
+       if filetype == 11:
+           print('File type: MH_KEXT_BUNDLE')
+       ncmds = header[4]
+       print("Number of load comands: ", ncmds)
+       sizeofcmds = header[5]
+       print("Size of all load commands: ", sizeofcmds)
+       flags = header[6]
+       exp = 24
+       list_of_exp = []
+       for count_of_flags in range(0, 25):
+           if flags // (2 ** exp) == 1:
+               list_of_exp.append(exp)
+               flags -= 2 ** exp
+           exp -= 1
+       list_of_exp.reverse()
+       print("List of flags:")
+       for count in range(0, len(list_of_exp)):
+           if list_of_exp[count] == 0:
+               print("MH_NOUNDEFS")
+           if list_of_exp[count] == 1:
+               print("MH_INCRLINK")
+           if list_of_exp[count] == 2:
+               print("MH_DYLDLINK")
+           if list_of_exp[count] == 3:
+               print("MH_BINDATLOAD")
+           if list_of_exp[count] == 4:
+               print("MH_PREBOUND")
+           if list_of_exp[count] == 5:
+               print("MH_SPLIT_SEGS")
+           if list_of_exp[count] == 6:
+               print("MH_LAZY_INIT")
+           if list_of_exp[count] == 7:
+               print("MH_TWOLEVEL")
+           if list_of_exp[count] == 8:
+               print("MH_FORCE_FLAT")
+           if list_of_exp[count] == 9:
+               print("MH_NOMULTIDEFS")
+           if list_of_exp[count] == 10:
+               print("MH_NOFIXPREBINDING")
+           if list_of_exp[count] == 11:
+               print("MH_PREBINDABLE")
+           if list_of_exp[count] == 12:
+               print("MH_ALLMODSBOUND")
+           if list_of_exp[count] == 13:
+               print("MH_SUBSECTIONS_VIA_SYMBOLS")
+           if list_of_exp[count] == 14:
+               print("MH_CANONICAL")
+           if list_of_exp[count] == 15:
+               print("MH_WEAK_DEFINES")
+           if list_of_exp[count] == 16:
+               print("MH_BINDS_TO_WEAK")
+           if list_of_exp[count] == 17:
+               print("MH_ALLOW_STACK_EXECUTION")
+           if list_of_exp[count] == 18:
+               print("MH_ROOT_SAFE")
+           if list_of_exp[count] == 19:
+               print("MH_SETUID_SAFE")
+           if list_of_exp[count] == 20:
+               print("MH_NO_REEXPORTED_DYLIBS")
+           if list_of_exp[count] == 21:
+               print("MH_PIE")
+           if list_of_exp[count] == 22:
+               print("MH_DEAD_STRIPPABLE_DYLIB")
+           if list_of_exp[count] == 23:
+               print("MH_HAS_TLV_DESCRIPTORS")
+           if list_of_exp[count] == 24:
+               print("MH_NO_HEAP_EXECUTION")
+       indent = 0
+       if x == 'x64':
+           indent = 32
+       elif x == 'x32':
+           indent = 28
+       else:
+           exit(1)
+       for cmds in range(ncmds):
+           load_command = struct.unpack('II', fileData[indent:(indent + 8)])
+           c_type = load_command[0]
+           c_size = load_command[1]
+           if c_type == 25:
+               segment = struct.unpack('II16c4QiiII', fileData[indent:(indent + 72)])
+               number_of_section = segment[24]
+               indent_sections = indent + 72
+               for section in range(number_of_section):
+                   this_section = struct.unpack('16c16cQQ8I', fileData[indent_sections:indent_sections + 80])
+                   section_name = this_section[0:16]
+                   segment_name = this_section[16:32]
+                   section_addr = this_section[32]
+                   section_offset = this_section[34]
+                   str_section_name = ''
+                   str_segment_name = ''
+                   for char in range(16):
+                       str_section_name += section_name[char].decode().strip()
+                       str_segment_name += segment_name[char].decode().strip()
+                   print("Section name: ", str_section_name, "\tSegment name: ", str_segment_name,
+                         "\tSection's file offset: ",
+                         hex(section_offset), "\tSection's memory address: ", hex(section_addr))
+                   indent_sections += 80
+           indent += c_size
+   elif magic[0] == 0x4d and magic[1] == 0x5a:
+       header = struct.unpack('cc13H4H2H10HI', fileData[0:64])
+       if (header[0] + header[1]).decode() != 'MZ':
+           print("File type is not PE")
+           exit(3)
+       else:
+           print("Type of file: PE")
+       e_lfanew = header[31]
+       pe_header = struct.unpack('I2H3I2H', fileData[e_lfanew:e_lfanew + 24])
+       machine = pe_header[1]
+       if machine == 0x1d3:
+           print('File architecture: _AM33')
+       elif machine == 0x8664:
+           print('File architecture: _AMD64')
+       elif machine == 0x1c0:
+           print('File architecture: _ARM')
+       elif machine == 0xaa64:
+           print('File architecture: _ARM64')
+       elif machine == 0x1c4:
+           print('File architecture: _ARM - 2')
+       elif machine == 0xebc:
+           print('File architecture: _EFI')
+       elif machine == 0x14c:
+           print('File architecture: _Machine _i386')
+       elif machine == 0x200:
+           print('File architecture: _Machine _ia64')
+       elif machine == 0x6232:
+           print('File architecture: _LOONGARCH32')
+       elif machine == 0x6264:
+           print('File architecture: _LOONGARCH64')
+       elif machine == 0x9041:
+           print('File architecture: _M32R')
+       elif machine == 0x266:
+           print('File architecture: _MIPS16')
+       elif machine == 0x366:
+           print('File architecture: _MIPSFPU')
+       elif machine == 0x466:
+           print('File architecture: _MIPSFPU16')
+       elif machine == 0x1f0:
+           print('File architecture: POWERPC')
+       elif machine == 0x1f1:
+           print('File architecture: POWERPCFP')
+       elif machine == 0x166:
+           print('File architecture: _R4000')
+       elif machine == 0x5032:
+           print('File architecture: _RISCV32')
+       elif machine == 0x5064:
+           print('File architecture: _RISCV64')
+       elif machine == 0x5128:
+           print('File architecture: _RISCV128')
+       elif machine == 0x1a2:
+           print('File architecture: _SH3')
+       elif machine == 0x1a3:
+           print('File architecture: _SH3DSP')
+       elif machine == 0x1a6:
+           print('File architecture: _SH4')
+       elif machine == 0x1a8:
+           print('File architecture: _SH5')
+       elif machine == 0x169:
+           print('File architecture: _WCEMIPSV2')
+       else:
+           print("Unknown file architecture!")
+       print('Number of sections: ', pe_header[2])
+       print('Date of file creation:', datetime.datetime.fromtimestamp(pe_header[3]))
+       pe_characteristics = pe_header[7]
+       exp = 15
+       list_of_characteristics = []
+       for count_of_flags in range(0, 15):
+           if pe_characteristics // (2 ** exp) == 1:
+               list_of_characteristics.append(exp)
+               pe_characteristics -= 2 ** exp
+           exp -= 1
+       list_of_characteristics.reverse()
+       print('List of attributes:')
+       for count in range(0, len(list_of_characteristics)):
+           if list_of_characteristics[count] == 0:
+               print("IMAGE_FILE_RELOCS_STRIPPED")
+           if list_of_characteristics[count] == 1:
+               print("IMAGE_FILE_EXECUTABLE_IMAGE")
+           if list_of_characteristics[count] == 2:
+               print("IMAGE_FILE_LINE_NUMS_STRIPPED")
+           if list_of_characteristics[count] == 3:
+               print("IMAGE_FILE_LOCAL_SYMS_STRIPPED")
+           if list_of_characteristics[count] == 4:
+               print("IMAGE_FILE_AGGRESIVE_WS_TRIM")
+           if list_of_characteristics[count] == 5:
+               print("IMAGE_FILE_LARGE_ADDRESS_AWARE")
+           if list_of_characteristics[count] == 6:
+               print("IMAGE_FILE_16BIT_MACHINE")
+           if list_of_characteristics[count] == 7:
+               print("IMAGE_FILE_BYTES_REVERSED_LO")
+           if list_of_characteristics[count] == 8:
+               print("IMAGE_FILE_32BIT_MACHINE")
+           if list_of_characteristics[count] == 9:
+               print("IMAGE_FILE_DEBUG_STRIPPED")
+           if list_of_characteristics[count] == 10:
+               print("IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP")
+           if list_of_characteristics[count] == 11:
+               print("IMAGE_FILE_NET_RUN_FROM_SWAP")
+           if list_of_characteristics[count] == 12:
+               print("IMAGE_FILE_SYSTEM ")
+           if list_of_characteristics[count] == 13:
+               print("IMAGE_FILE_DLL")
+           if list_of_characteristics[count] == 14:
+               print("IMAGE_FILE_UP_SYSTEM_ONLY")
+           if list_of_characteristics[count] == 15:
+               print("IMAGE_FILE_BYTES_REVERSED_HI")
+       peSectionTemplate = '8cI5I2HI'
+       indent = e_lfanew + 24 + pe_header[6]
+       for section in range(pe_header[2]):
+           pe_section = struct.unpack('8cI5I2HI', fileData[indent:indent + 40])
+           pe_section_name = pe_section[0:8]
+           str_section_name = ''
+           for char in range(8):
+               str_section_name += pe_section_name[char].decode().strip()
+           pe_section_address = pe_section[9]
+           pe_section_offset = pe_section[11]
+           pe_section_characteristics = pe_section[16]
+           attr_list = []
+           for attr in range(10):
+               if pe_section_characteristics >= 0x80000000:
+                   attr_list.append('IMAGE_SCN_MEM_WRITE')
+                   pe_section_characteristics -= 0x80000000
+               if pe_section_characteristics >= 0x40000000:
+                   attr_list.append('IMAGE_SCN_MEM_READ')
+                   pe_section_characteristics -= 0x40000000
+               if pe_section_characteristics >= 0x20000000:
+                   attr_list.append('IMAGE_SCN_MEM_EXECUTE')
+                   pe_section_characteristics -= 0x20000000
+               if pe_section_characteristics >= 0x10000000:
+                   attr_list.append('IMAGE_SCN_MEM_SHARED')
+                   pe_section_characteristics -= 0x10000000
+               if pe_section_characteristics >= 0x08000000:
+                   attr_list.append('IMAGE_SCN_MEM_NOT_PAGED')
+                   pe_section_characteristics -= 0x08000000
+               if pe_section_characteristics >= 0x04000000:
+                   attr_list.append('IMAGE_SCN_MEM_NOT_CACHED')
+                   pe_section_characteristics -= 0x04000000
+               if pe_section_characteristics >= 0x02000000:
+                   attr_list.append('IMAGE_SCN_MEM_DISCARDABLE')
+                   pe_section_characteristics -= 0x02000000
+               if pe_section_characteristics >= 0x00000080:
+                   attr_list.append('IMAGE_SCN_CNT_UNINITIALIZED_DATA')
+                   pe_section_characteristics -= 0x00000080
+               if pe_section_characteristics >= 0x00000040:
+                   attr_list.append('IMAGE_SCN_CNT_INITIALIZED_DATA')
+                   pe_section_characteristics -= 0x00000040
+               if pe_section_characteristics >= 0x00000020:
+                   attr_list.append('IMAGE_SCN_CNT_CODE')
+                   pe_section_characteristics -= 0x00000020
+           indent += 40
+           print("Section name: ", str_section_name, "\tSection offset: ", hex(pe_section_offset), "   \tSection address: ",
+                 hex(pe_section_address), "\tSection attributes: ", attr_list)
+   else:
+       print('Error! File is not ELF, PE or Mach_0')
+       exit(2)
+except FileNotFoundError:
+   print("File not found")
+   exit(1)
